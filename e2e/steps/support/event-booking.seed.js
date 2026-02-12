@@ -55,6 +55,23 @@ export async function fetchOrderState(orderId) {
 }
 
 /**
+ * @param {string} orderId
+ * @returns {Promise<{state: string; currency_code: string; total_pence: number; organizer_id: string} | null>}
+ */
+export async function fetchOrderDetails(orderId) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const { data, error } = await admin
+		.from('orders')
+		.select('state,currency_code,total_pence,organizer_id')
+		.eq('id', orderId)
+		.maybeSingle();
+	if (error) throw new Error(`[e2e:event-booking] failed to fetch order details ${orderId}: ${error.message}`);
+	return data ?? null;
+}
+
+/**
  * @param {string} bookingId
  * @returns {Promise<string | null>}
  */
@@ -64,6 +81,27 @@ export async function fetchBookingState(bookingId) {
 
 	const { data, error } = await admin.from('bookings').select('state').eq('id', bookingId).maybeSingle();
 	if (error) throw new Error(`[e2e:event-booking] failed to fetch booking ${bookingId}: ${error.message}`);
+	return data?.state ?? null;
+}
+
+/**
+ * @param {string} bookingReference
+ * @returns {Promise<string | null>}
+ */
+export async function fetchBookingStateByReference(bookingReference) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const { data, error } = await admin
+		.from('bookings')
+		.select('state')
+		.eq('booking_reference', bookingReference)
+		.maybeSingle();
+	if (error) {
+		throw new Error(
+			`[e2e:event-booking] failed to fetch booking by reference ${bookingReference}: ${error.message}`
+		);
+	}
 	return data?.state ?? null;
 }
 
@@ -132,4 +170,88 @@ export async function fetchWebhookEvent(providerEventId) {
 	}
 
 	return data ?? null;
+}
+
+/**
+ * @param {string} providerEventId
+ * @returns {Promise<number | null>}
+ */
+export async function countWebhookEvents(providerEventId) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const { count, error } = await admin
+		.from('payment_webhook_events')
+		.select('id', { count: 'exact', head: true })
+		.eq('provider_event_id', providerEventId);
+
+	if (error) {
+		throw new Error(
+			`[e2e:event-booking] failed to count webhook events for ${providerEventId}: ${error.message}`
+		);
+	}
+	return count ?? 0;
+}
+
+/**
+ * @param {string} orderId
+ * @returns {Promise<number | null>}
+ */
+export async function countBookingsForOrder(orderId) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const { count, error } = await admin
+		.from('bookings')
+		.select('id', { count: 'exact', head: true })
+		.eq('order_id', orderId);
+
+	if (error) {
+		throw new Error(`[e2e:event-booking] failed to count bookings for order ${orderId}: ${error.message}`);
+	}
+	return count ?? 0;
+}
+
+/**
+ * @param {string} organizerSlug
+ * @returns {Promise<string | null>}
+ */
+export async function fetchOrganizerIdBySlug(organizerSlug) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const { data, error } = await admin.from('organizers').select('id').eq('slug', organizerSlug).maybeSingle();
+	if (error) {
+		throw new Error(
+			`[e2e:event-booking] failed to fetch organizer id for slug ${organizerSlug}: ${error.message}`
+		);
+	}
+	return data?.id ?? null;
+}
+
+/**
+ * @param {string} organizerSlug
+ * @param {string} eventSlug
+ * @returns {Promise<string | null>}
+ */
+export async function fetchEventStatusBySlug(organizerSlug, eventSlug) {
+	const admin = getAdminClientOrNull();
+	if (!admin) return null;
+
+	const organizerId = await fetchOrganizerIdBySlug(organizerSlug);
+	if (!organizerId) return null;
+
+	const { data, error } = await admin
+		.from('events')
+		.select('status')
+		.eq('organizer_id', organizerId)
+		.eq('slug', eventSlug)
+		.maybeSingle();
+
+	if (error) {
+		throw new Error(
+			`[e2e:event-booking] failed to fetch event status ${organizerSlug}/${eventSlug}: ${error.message}`
+		);
+	}
+	return data?.status ?? null;
 }

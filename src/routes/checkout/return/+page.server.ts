@@ -15,6 +15,7 @@ export const load = (async ({ url }) => {
 	return {
 		status,
 		orderId,
-		orderState
+		orderState,
+		isOrderKnown: orderId !== null && orderState !== null
 	};
 }) satisfies PageServerLoad;

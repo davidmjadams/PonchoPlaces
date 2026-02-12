@@ -11,6 +11,7 @@
 			status: string;
 			orderId: string | null;
 			orderState: string | null;
+			isOrderKnown: boolean;
 		};
 	};
 
@@ -26,7 +27,13 @@
 			</CardDescription>
 		</CardHeader>
 		<CardContent className="space-y-3">
-			{#if data.status === 'success'}
+			{#if data.status === 'success' && !data.orderId}
+				<p>We could not verify this checkout session.</p>
+				<p class="text-sm text-muted-foreground">Please return to your basket and try again.</p>
+			{:else if data.status === 'success' && !data.isOrderKnown}
+				<p>We could not verify this checkout session.</p>
+				<p class="text-sm text-muted-foreground">If payment was taken, we will reconcile it from webhook events.</p>
+			{:else if data.status === 'success'}
 				{#if data.orderState === 'paid' || data.orderState === 'partially_refunded'}
 					<p>Booking confirmed.</p>
 				{:else}
@@ -35,6 +42,7 @@
 				{/if}
 			{:else if data.status === 'cancel'}
 				<p>Payment not completed.</p>
+				<p class="text-sm text-muted-foreground">Try payment again from your basket.</p>
 			{:else}
 				<p>Unknown return status. Please check your bookings or contact support.</p>
 			{/if}

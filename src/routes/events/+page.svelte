@@ -49,7 +49,7 @@
 	{:else}
 		<ul class="grid gap-4 md:grid-cols-2">
 			{#each data.events as event (event.id)}
-				<li>
+				<li data-testid="event-card" data-organizer-slug={event.organizerSlug} data-event-slug={event.slug}>
 					<Card>
 						<CardHeader>
 							<CardTitle>{event.title}</CardTitle>
@@ -68,6 +68,9 @@
 								<span class="font-medium">{event.confirmedAttendeeCount}/{event.capacityTotal ?? 'unlimited'}</span>
 							</p>
 							<a
+								data-testid="event-detail-link"
+								data-organizer-slug={event.organizerSlug}
+								data-event-slug={event.slug}
 								class="text-sm font-medium text-primary underline underline-offset-4"
 								href={`/events/${event.organizerSlug}/${event.slug}`}
 							>

@@ -3,7 +3,7 @@ import { getDomainModule } from '$lib/server/infra/domainModule';
 import type { EventBookingModule } from '$lib/server/domain/event-booking/event-booking.module';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ locals, params }) => {
 	const { eventBookingService } = getDomainModule<EventBookingModule>('event-booking');
 	const event = await eventBookingService.getEventDetail({
 		organizerSlug: params.organizerSlug,
@@ -14,8 +14,11 @@ export const load = (async ({ params }) => {
 		throw redirect(303, '/events');
 	}
 
+	const { user } = await locals.safeGetSession();
+
 	return {
 		event,
+		parentEmail: user?.email ?? null,
 		formTemplateFields: [
 			{ key: 'parent_name', label: 'Parent name', scope: 'booking', required: true },
 			{ key: 'parent_email', label: 'Parent email', scope: 'booking', required: true },

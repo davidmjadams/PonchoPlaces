@@ -1,47 +1,52 @@
 @event-booking @v1 @mvp
-Feature: Event booking V1 foundations
-  Multi-tenant childcare-focused booking with guest and logged-in checkout.
+Feature: Parents can book childcare activities in a multi-tenant marketplace (V1)
+  Parents can browse, add attendees, start payment, and receive booking confirmation while organizers manage their own tenant data.
 
   Background:
     Given the deterministic fixture set "baseline" is loaded
     And the platform timezone is "Europe/London"
 
-  @v1 @multitenant @browse
-  Scenario: Customer can browse published events across organizers
-    Given I am browsing as a "guest" customer
-    When I navigate to "/events"
-    Then I should see text "Half Term Camp"
-    And I should see text "Little Acorns"
-    And I should see text "Riverdale Swim Intro"
-    And I should see text "Riverdale Kids"
+  @v1 @browse @multitenant
+  Scenario: Guest parent sees published events across organizers only
+    Given I am browsing as a "guest parent" customer
+    When I open the event catalog
+    Then the catalog should include organizer/event slugs:
+      | organizer_slug | event_slug               |
+      | little-acorns  | half-term-camp-2026      |
+      | little-acorns  | toddler-music-monday     |
+      | riverdale-kids | riverdale-swim-intro     |
+    And the catalog should not include event slug "internal-staff-session"
+    And every catalog event should be published
 
-  @v1 @onboarding @admin @rbac
-  Scenario: Platform admin opens organizer management scaffold
-    Given user role "platform-admin" is signed in as "platform.admin@example.com"
+  @v1 @browse @visibility
+  Scenario: Guest parent cannot open an unpublished event detail page
+    Given event "internal-staff-session" for organizer "little-acorns" is in status "draft"
+    When I open event detail for organizer "little-acorns" and event "internal-staff-session"
+    Then the last page response status should be 404
+    And I should see text "Event not found"
+
+  @v1 @rbac @admin
+  Scenario: Non-admin parent cannot open platform organizer management
+    Given I am browsing as a "guest parent" customer
     When I navigate to "/admin/organizers"
-    Then I should see text "Organizer management"
-    And I should see text "Create organizer"
+    Then access should be denied for current page
+
+  @v1 @rbac @multitenant @organizer
+  Scenario: Organizer admin cannot manage another organizer by URL guessing
+    Given user role "organizer-admin" is signed in as "davidmjadams+test@gmail.com"
+    When I open organizer "riverdale-kids" event creation page
+    Then access should be denied for current page
 
   @v1 @organizer @events
-  Scenario: Organizer admin opens create event scaffold with single-session defaults
+  Scenario: Organizer admin gets single-session defaults when creating their own event
     Given user role "organizer-admin" is signed in as "davidmjadams+test@gmail.com"
-    When I navigate to "/organizer/little-acorns/events/new"
-    Then I should see text "Create event"
-    And I should see text "single_session"
-    And I should see text "capacity"
-
-  @v1 @browse @event-detail
-  Scenario: Customer opens deterministic event detail page
-    Given the event "Half Term Camp" with id "11111111-1111-1111-1111-111111111001" exists for organizer "Little Acorns"
-    When I navigate to "/events/little-acorns/half-term-camp-2026"
-    Then I should see text "Half Term Camp"
-    And I should see text "Camp Standard"
-    And I should see text "Europe/London"
-    And I should see text "Little Acorns Hall"
+    When I open organizer "little-acorns" event creation page
+    Then form field "event_type" should have value "single_session"
+    And form field "capacity_total" should be empty
 
   @v1 @basket @attendees @guest
-  Scenario: Guest adds one event with two attendees to basket
-    Given I am browsing as a "guest" customer
+  Scenario: Guest parent adds two children to one organizer basket
+    Given I am browsing as a "guest parent" customer
     When I navigate to "/book/little-acorns/half-term-camp-2026/attendees"
     And I add attendee rows:
       | attendee_name   | attendee_dob | ticket_type_id                         |
@@ -53,61 +58,81 @@ Feature: Event booking V1 foundations
       | consent_safeguarding | true                 |
     And I submit form "booking-capture"
     Then I should be on "/basket"
-    And I should see text "2 attendees"
+    And order reference "LA-ORDER-PENDING-001" should belong to organizer "little-acorns"
+
+  @v1 @forms @validation
+  Scenario: Parent cannot continue when a required booking field is missing
+    Given I am browsing as a "guest parent" customer
+    When I navigate to "/book/little-acorns/half-term-camp-2026/attendees"
+    And I complete form "booking-capture" with values:
+      | parent_name          | Parent One |
+      | consent_safeguarding | true       |
+    And I submit form "booking-capture"
+    Then the booking capture form should show validation error message
 
   @v1 @basket @logged-in
-  Scenario: Logged-in parent adds attendee from profile flow scaffold
-    Given user role "parent" is signed in as "parent1@example.com"
+  Scenario: Logged-in parent sees account email prefilled during attendee capture
+    Given user role "organizer-admin" is signed in as "davidmjadams+test@gmail.com"
     When I navigate to "/book/little-acorns/toddler-music-monday/attendees"
-    And I should see text "Select attendees"
-    And I should see text "Use child profile"
-    Then I should see text "Toddler Music Monday"
+    Then form field "parent_email" should have value "davidmjadams+test@gmail.com"
 
-  @v1 @payments @ponchopay @guest
-  Scenario: Guest checkout starts PonchoPay redirect session
-    Given the order id "55555555-5555-5555-5555-555555555101" should have state "pending_payment"
-    When I start checkout for order id "55555555-5555-5555-5555-555555555101"
-    Then PonchoPay checkout should be requested with:
-      | provider              | ponchopay         |
-      | order_id              | 55555555-5555-5555-5555-555555555101 |
-      | success_return_path   | /checkout/return?status=success |
-      | cancel_return_path    | /checkout/return?status=cancel  |
+  @v1 @payments @ponchopay
+  Scenario: Parent starts PonchoPay checkout with deterministic contract fields
+    Given order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
+    When I start checkout for order reference "LA-ORDER-PENDING-001"
+    Then PonchoPay checkout contract should include:
+      | provider              | ponchopay |
+      | order_ref             | LA-ORDER-PENDING-001 |
+      | currency              | GBP |
+      | amount_pence          | 2400 |
+      | success_return_path   | /checkout/return?status=success&orderId={order_id} |
+      | cancel_return_path    | /checkout/return?status=cancel&orderId={order_id} |
 
   @v1 @payments @return-flow
-  Scenario: Success return page can load before webhook arrives
-    Given the order id "55555555-5555-5555-5555-555555555101" should have state "pending_payment"
-    When I navigate to "/checkout/return?status=success&orderId=55555555-5555-5555-5555-555555555101"
-    Then I should see text "Processing payment confirmation"
-    And I should see text "We are waiting for final webhook confirmation"
+  Scenario: Parent can return from checkout before webhook confirmation arrives
+    Given order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
+    When I open checkout return for order reference "LA-ORDER-PENDING-001" with status "success"
+    Then checkout return should show pending confirmation guidance
+    And order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
 
-  @v1 @payments @webhooks @idempotency
-  Scenario: Webhook can arrive before customer return page
-    Given the order id "55555555-5555-5555-5555-555555555101" should have state "pending_payment"
-    When I trigger PonchoPay webhook "payment_succeeded" with payload id "evt_v1_success_0001"
+  @v1 @payments @webhooks @state-machine
+  Scenario: Payment succeeded webhook confirms the order lifecycle
+    Given order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
+    When I send PonchoPay webhook "payment_succeeded" with provider event id "evt_v1_success_0001" for order reference "LA-ORDER-PENDING-001"
     Then the response status should be 202
-    And the latest webhook event "evt_v1_success_0001" should be processed idempotently
-    When I navigate to "/checkout/return?status=success&orderId=55555555-5555-5555-5555-555555555101"
-    Then I should see text "Booking confirmed"
+    And exactly 1 webhook events should exist with provider event id "evt_v1_success_0001"
+    And order reference "LA-ORDER-PENDING-001" should be in state "paid"
+
+  @v1 @payments @webhooks @idempotency @notifications
+  Scenario: Duplicate payment_succeeded delivery does not duplicate side effects
+    Given order reference "LA-ORDER-PAID-001" should be in state "paid"
+    And exactly 1 bookings should exist for order reference "LA-ORDER-PAID-001"
+    When I send PonchoPay webhook "payment_succeeded" with provider event id "evt_v1_dup_0001" for order reference "LA-ORDER-PAID-001"
+    And I send PonchoPay webhook "payment_succeeded" with provider event id "evt_v1_dup_0001" for order reference "LA-ORDER-PAID-001"
+    Then the response status should be 202
+    And exactly 1 webhook events should exist with provider event id "evt_v1_dup_0001"
+    And exactly 1 bookings should exist for order reference "LA-ORDER-PAID-001"
+    And exactly 1 booking confirmation notifications should be queued for order reference "LA-ORDER-PAID-001"
 
   @v1 @payments @failure
-  Scenario: Payment failed webhook keeps order in pending payment review
-    Given the order id "55555555-5555-5555-5555-555555555101" should have state "pending_payment"
-    When I trigger PonchoPay webhook "payment_failed" with payload id "evt_v1_failed_0001"
+  Scenario: Parent sees retry guidance when payment fails
+    Given order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
+    When I send PonchoPay webhook "payment_failed" with provider event id "evt_v1_failed_0001" for order reference "LA-ORDER-PENDING-001"
     Then the response status should be 202
-    And I navigate to "/checkout/return?status=cancel&orderId=55555555-5555-5555-5555-555555555101"
-    Then I should see text "Payment not completed"
-    And the order id "55555555-5555-5555-5555-555555555101" should have state "pending_payment"
+    And order reference "LA-ORDER-PENDING-001" should be in state "pending_payment"
+    When I open checkout return for order reference "LA-ORDER-PENDING-001" with status "cancel"
+    Then checkout return should show payment retry guidance
 
-  @v1 @organizer @bookings
-  Scenario: Organizer bookings list shows attendee details scaffold
+  @v1 @organizer @bookings @multitenant
+  Scenario: Organizer sees only their own booking references
     Given user role "organizer-admin" is signed in as "davidmjadams+test@gmail.com"
     When I navigate to "/organizer/little-acorns/bookings"
-    Then I should see text "Bookings"
-    And I should see text "LA-BOOK-0001"
-    And I should see text "Noah Example"
+    Then organizer bookings page should include booking reference "LA-BOOK-0001"
+    And organizer bookings page should not include booking reference "RD-BOOK-0001"
 
-  @v1 @notifications
-  Scenario: Booking confirmation notification stub is queued
-    Given the booking id "88888888-8888-8888-8888-888888888101" should have state "confirmed"
-    When I navigate to "/checkout/return?status=success&orderId=55555555-5555-5555-5555-555555555102"
-    Then a notification stub should be queued for "booking_confirmation"
+  @v1 @payments @security
+  Scenario: Parent sees a safe message when checkout return URL is tampered
+    Given I am browsing as a "guest parent" customer
+    When I navigate to "/checkout/return?status=success"
+    Then checkout return should show safe verification error
+    And the current page should not reveal booking reference "LA-BOOK-0001"

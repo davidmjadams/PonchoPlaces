@@ -224,6 +224,25 @@ begin
 			false,
 			'2026-02-22T14:00:00+00',
 			'2026-02-22T15:00:00+00'
+		),
+		(
+			'11111111-1111-1111-1111-111111111006',
+			'00000000-0000-0000-0000-000000000101',
+			'internal-staff-session',
+			'Internal Staff Session',
+			'Unpublished internal planning event.',
+			'single_session',
+			'draft',
+			'Europe/London',
+			'00000000-0000-0000-0000-000000000301',
+			8,
+			false,
+			null,
+			'00000000-0000-0000-0000-000000000401',
+			'00000000-0000-0000-0000-000000000501',
+			false,
+			'2026-02-24T14:00:00+00',
+			'2026-02-24T15:00:00+00'
 		);
 
 	insert into public.event_sessions (id, event_id, starts_at, ends_at, is_all_day, status)
@@ -360,6 +379,21 @@ begin
 			'pps_test_0002',
 			'order-seed-0002',
 			'2026-02-01T12:00:00+00'
+		),
+		(
+			'55555555-5555-5555-5555-555555555103',
+			'00000000-0000-0000-0000-000000000101',
+			null,
+			'guest-draft@example.com',
+			'Guest Parent Draft',
+			'GBP',
+			'draft',
+			0,
+			0,
+			0,
+			null,
+			'order-seed-0003',
+			null
 		);
 
 	insert into public.order_items (
@@ -457,6 +491,19 @@ begin
 			'confirmed',
 			'LA-BOOK-0001',
 			'2026-02-01T12:05:00+00'
+		),
+		(
+			'88888888-8888-8888-8888-888888888102',
+			'00000000-0000-0000-0000-000000000102',
+			null,
+			null,
+			'11111111-1111-1111-1111-111111111005',
+			null,
+			null,
+			'river.parent@example.com',
+			'confirmed',
+			'RD-BOOK-0001',
+			'2026-02-02T09:10:00+00'
 		);
 
 	insert into public.booking_attendees (
@@ -474,6 +521,14 @@ begin
 			'77777777-7777-7777-7777-777777777103',
 			'Noah Example',
 			'2018-03-02',
+			'confirmed'
+		),
+		(
+			'99999999-9999-9999-9999-999999999102',
+			'88888888-8888-8888-8888-888888888102',
+			null,
+			'River Example',
+			'2017-11-11',
 			'confirmed'
 		);
 
