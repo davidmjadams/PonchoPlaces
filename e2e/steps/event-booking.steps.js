@@ -326,7 +326,7 @@ Then('the last page response status should be {int}', async (expectedStatusCode)
 	assert.equal(state.lastNavigationStatus, expectedStatusCode);
 });
 
-Then('the catalog should include organizer/event slugs:', async (dataTable) => {
+Then('the catalog should include organizer\\/event slugs:', async (dataTable) => {
 	const expectedRows = tableToRows(dataTable);
 	const entries = state.catalogEntries.length > 0 ? state.catalogEntries : await readCatalogEntriesFromPage();
 
