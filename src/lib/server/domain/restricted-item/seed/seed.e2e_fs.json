@@ -1,0 +1,10 @@
+{
+	"restrictedItems": [
+		{
+			"id": 1,
+			"name": "Test restricted item",
+			"description": "Seeded for auth cucumber + playwright e2e"
+		}
+	]
+}
+

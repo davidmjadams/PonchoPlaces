@@ -1,0 +1,11 @@
+{
+	"users": [],
+	"items": [
+		{
+			"id": 1,
+			"name": "Dev item",
+			"description": "Seeded automatically for local dev"
+		}
+	]
+}
+

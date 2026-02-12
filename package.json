@@ -1,0 +1,69 @@
+{
+	"name": "workspace",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"packageManager": "pnpm@10.13.1",
+	"scripts": {
+		"dev": "APP_ENV=dev node scripts/dev/run.mjs",
+		"dev:test": "APP_ENV=test node scripts/dev/run.mjs",
+		"dev:e2e": "APP_ENV=e2e node scripts/dev/run.mjs",
+		"dev:e2e:fs": "APP_ENV=e2e_fs node scripts/dev/run.mjs",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"test": "vitest run",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"db:generate": "drizzle-kit generate",
+		"db:push": "drizzle-kit push",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"db:seed": "tsx src/lib/server/db/seed/cli.ts --mode dev",
+		"db:seed:e2e": "tsx src/lib/server/db/seed/cli.ts --mode test --reset",
+		"supabase": "supabase",
+		"db:supabase:start": "supabase start --exclude realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor",
+		"db:supabase:stop": "supabase stop",
+		"db:supabase:status": "supabase status",
+		"db:supabase:reset": "supabase db reset --no-seed --local",
+		"e2e:cucumber": "cucumber-js --import e2e/steps/**/*.js",
+		"e2e:run": "node scripts/e2e/run.mjs e2e/features/items.feature"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "^0.10.4",
+		"@supabase/ssr": "^0.8.0",
+		"@supabase/supabase-js": "^2.90.1",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"drizzle-orm": "^0.45.1",
+		"postgres": "^3.4.7",
+		"tailwind-merge": "^3.4.0"
+	},
+	"devDependencies": {
+		"@cucumber/cucumber": "^12.5.0",
+		"@playwright/test": "^1.57.0",
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/kit": "^2.47.1",
+		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"autoprefixer": "^10.4.23",
+		"dotenv": "^17.2.3",
+		"drizzle-kit": "^0.31.8",
+		"playwright": "^1.57.0",
+		"postcss": "^8.5.6",
+		"supabase": "^2.72.3",
+		"svelte": "^5.41.0",
+		"svelte-check": "^4.3.3",
+		"tailwindcss": "^3.4.17",
+		"tailwindcss-animate": "^1.0.7",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.1.10",
+		"vitest": "^3.2.4"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"supabase"
+		]
+	}
+}

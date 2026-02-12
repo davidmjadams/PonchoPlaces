@@ -1,0 +1,11 @@
+{
+	"users": [],
+	"items": [
+		{
+			"id": 1,
+			"name": "Test item",
+			"description": "Seeded for cucumber + playwright e2e"
+		}
+	]
+}
+

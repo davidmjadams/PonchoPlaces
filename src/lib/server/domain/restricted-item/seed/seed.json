@@ -1,0 +1,10 @@
+{
+	"restrictedItems": [
+		{
+			"id": 1,
+			"name": "Restricted item",
+			"description": "Only visible to authenticated users"
+		}
+	]
+}
+
