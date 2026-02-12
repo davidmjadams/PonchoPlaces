@@ -5,7 +5,6 @@
 	import CardDescription from '$lib/components/ui/card-description.svelte';
 	import CardHeader from '$lib/components/ui/card-header.svelte';
 	import CardTitle from '$lib/components/ui/card-title.svelte';
-	import Input from '$lib/components/ui/input.svelte';
 
 	type Props = {
 		data: {
@@ -41,15 +40,25 @@
 			<form method="POST" class="space-y-4">
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Title</div>
-					<Input name="title" value={data.event.title} />
+					<input
+						class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						name="title"
+						value={data.event.title}
+					/>
 				</label>
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Event type</div>
-					<Input name="event_type" value={data.event.eventType} readonly />
+					<input
+						class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						name="event_type"
+						value={data.event.eventType}
+						readonly
+					/>
 				</label>
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Capacity</div>
-					<Input
+					<input
+						class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 						name="capacity_total"
 						type="number"
 						min="1"

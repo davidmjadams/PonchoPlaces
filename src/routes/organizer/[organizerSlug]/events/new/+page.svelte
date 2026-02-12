@@ -50,7 +50,7 @@
 				</label>
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Capacity</div>
-					<Input name="capacity_total" type="number" min="1" placeholder="20" />
+					<Input name="capacity_total" type="number" placeholder="20" />
 				</label>
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Basic ticket type name</div>
@@ -58,7 +58,7 @@
 				</label>
 				<label class="block space-y-2">
 					<div class="text-sm font-medium">Basic ticket price (pence)</div>
-					<Input name="ticket_price_pence" type="number" min="0" placeholder="1200" />
+					<Input name="ticket_price_pence" type="number" placeholder="1200" />
 				</label>
 				{#if form?.error}
 					<p class="text-sm text-destructive">{form.error}</p>
