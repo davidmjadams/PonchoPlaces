@@ -75,6 +75,63 @@ pnpm db:seed:e2e
 pnpm e2e:run
 ```
 
+## Event booking scaffold (V1-V3)
+
+This repo now includes a multi-tenant event-booking scaffold (childcare-first, generic events supported):
+
+- **BDD specs**: `e2e/features/event-booking-v1.feature`, `event-booking-v2.feature`, `event-booking-v3.feature`
+- **Step skeletons**: `e2e/steps/event-booking.steps.js` + support helpers
+- **Supabase schema**: `supabase/migrations/20260212000000_event_booking_platform_scaffold.sql`
+- **Deterministic seed function**: `seed_event_booking_e2e('baseline')`
+- **Webhook scaffold**: `src/routes/api/webhooks/ponchopay/+server.ts`
+
+### Environment variables (event booking)
+
+Minimum local/dev variables:
+
+- `DATABASE_URL`
+- `PUBLIC_SUPABASE_URL`
+- `PUBLIC_SUPABASE_ANON_KEY`
+- `E2E_SUPABASE_URL`
+- `E2E_SUPABASE_SERVICE_ROLE_KEY`
+- `PONCHOPAY_API_BASE_URL` (placeholder)
+- `PONCHOPAY_API_KEY` (placeholder)
+- `PONCHOPAY_WEBHOOK_SECRET` (placeholder)
+- `PONCHOPAY_ACCOUNT_ID` (placeholder)
+
+See `.env.example` for a full starter set.
+
+### Deterministic test data seeding
+
+Apply migrations/reset local Supabase first:
+
+```sh
+pnpm db:supabase:start
+pnpm db:supabase:reset
+pnpm db:push
+```
+
+Then load deterministic event-booking fixtures:
+
+```sh
+pnpm e2e:seed:event-booking
+```
+
+The seed profile currently provided is: `baseline`.
+
+### Run the V1/V2/V3 Cucumber suites
+
+```sh
+pnpm e2e:run:event-booking:v1
+pnpm e2e:run:event-booking:v2
+pnpm e2e:run:event-booking:v3
+```
+
+Notes:
+
+- Step definitions are scaffold-first and include TODO markers for unfinished integration points.
+- Webhook handling is wired for idempotent event persistence; full PonchoPay signature + transition logic is intentionally TODO-scaffolded.
+
 ## Notes
 
 - Keep `DATABASE_URL` server-side only (SvelteKit private env).

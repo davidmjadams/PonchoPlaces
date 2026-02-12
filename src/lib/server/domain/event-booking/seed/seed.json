@@ -1,0 +1,208 @@
+{
+	"organizers": [
+		{
+			"id": "00000000-0000-0000-0000-000000000101",
+			"slug": "little-acorns",
+			"name": "Little Acorns",
+			"timezone": "Europe/London"
+		},
+		{
+			"id": "00000000-0000-0000-0000-000000000102",
+			"slug": "riverdale-kids",
+			"name": "Riverdale Kids",
+			"timezone": "Europe/London"
+		}
+	],
+	"events": [
+		{
+			"id": "11111111-1111-1111-1111-111111111001",
+			"organizerId": "00000000-0000-0000-0000-000000000101",
+			"slug": "half-term-camp-2026",
+			"title": "Half Term Camp",
+			"description": "Multi-day holiday camp with arts and outdoor play.",
+			"eventType": "camp_multi_day",
+			"status": "published",
+			"timezone": "Europe/London",
+			"locationName": "Little Acorns Hall",
+			"startsAt": "2026-02-17T09:00:00+00:00",
+			"endsAt": "2026-02-19T16:00:00+00:00",
+			"capacityTotal": 40,
+			"confirmedAttendeeCount": 1,
+			"waitlistEnabled": true
+		},
+		{
+			"id": "11111111-1111-1111-1111-111111111002",
+			"organizerId": "00000000-0000-0000-0000-000000000101",
+			"slug": "toddler-music-monday",
+			"title": "Toddler Music Monday",
+			"description": "Single-session music and movement class.",
+			"eventType": "single_session",
+			"status": "published",
+			"timezone": "Europe/London",
+			"locationName": "Little Acorns Studio",
+			"startsAt": "2026-02-23T10:00:00+00:00",
+			"endsAt": "2026-02-23T11:00:00+00:00",
+			"capacityTotal": 18,
+			"confirmedAttendeeCount": 0,
+			"waitlistEnabled": true
+		},
+		{
+			"id": "11111111-1111-1111-1111-111111111003",
+			"organizerId": "00000000-0000-0000-0000-000000000101",
+			"slug": "art-explorers-course",
+			"title": "Art Explorers Course",
+			"description": "Four-week multi-session art course.",
+			"eventType": "course_multi_session",
+			"status": "published",
+			"timezone": "Europe/London",
+			"locationName": "Little Acorns Studio",
+			"startsAt": null,
+			"endsAt": null,
+			"capacityTotal": 20,
+			"confirmedAttendeeCount": 0,
+			"waitlistEnabled": true
+		},
+		{
+			"id": "11111111-1111-1111-1111-111111111004",
+			"organizerId": "00000000-0000-0000-0000-000000000101",
+			"slug": "saturday-drop-in-football",
+			"title": "Saturday Drop-In Football",
+			"description": "Weekly recurring drop-in session.",
+			"eventType": "recurring_drop_in",
+			"status": "published",
+			"timezone": "Europe/London",
+			"locationName": "Little Acorns Hall",
+			"startsAt": null,
+			"endsAt": null,
+			"capacityTotal": 30,
+			"confirmedAttendeeCount": 0,
+			"waitlistEnabled": true
+		},
+		{
+			"id": "11111111-1111-1111-1111-111111111005",
+			"organizerId": "00000000-0000-0000-0000-000000000102",
+			"slug": "riverdale-swim-intro",
+			"title": "Riverdale Swim Intro",
+			"description": "Cross-tenant fixture event.",
+			"eventType": "single_session",
+			"status": "published",
+			"timezone": "Europe/London",
+			"locationName": "Riverdale Sports Dome",
+			"startsAt": "2026-02-22T14:00:00+00:00",
+			"endsAt": "2026-02-22T15:00:00+00:00",
+			"capacityTotal": 12,
+			"confirmedAttendeeCount": 0,
+			"waitlistEnabled": true
+		}
+	],
+	"sessions": [
+		{
+			"id": "22222222-2222-2222-2222-222222222101",
+			"eventId": "11111111-1111-1111-1111-111111111001",
+			"startsAt": "2026-02-17T09:00:00+00:00",
+			"endsAt": "2026-02-17T16:00:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222102",
+			"eventId": "11111111-1111-1111-1111-111111111001",
+			"startsAt": "2026-02-18T09:00:00+00:00",
+			"endsAt": "2026-02-18T16:00:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222103",
+			"eventId": "11111111-1111-1111-1111-111111111001",
+			"startsAt": "2026-02-19T09:00:00+00:00",
+			"endsAt": "2026-02-19T16:00:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222104",
+			"eventId": "11111111-1111-1111-1111-111111111002",
+			"startsAt": "2026-02-23T10:00:00+00:00",
+			"endsAt": "2026-02-23T11:00:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222105",
+			"eventId": "11111111-1111-1111-1111-111111111003",
+			"startsAt": "2026-03-01T10:00:00+00:00",
+			"endsAt": "2026-03-01T11:30:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222106",
+			"eventId": "11111111-1111-1111-1111-111111111003",
+			"startsAt": "2026-03-08T10:00:00+00:00",
+			"endsAt": "2026-03-08T11:30:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222107",
+			"eventId": "11111111-1111-1111-1111-111111111004",
+			"startsAt": "2026-02-21T09:00:00+00:00",
+			"endsAt": "2026-02-21T10:00:00+00:00"
+		},
+		{
+			"id": "22222222-2222-2222-2222-222222222108",
+			"eventId": "11111111-1111-1111-1111-111111111004",
+			"startsAt": "2026-02-28T09:00:00+00:00",
+			"endsAt": "2026-02-28T10:00:00+00:00"
+		}
+	],
+	"ticketTypes": [
+		{
+			"id": "33333333-3333-3333-3333-333333333101",
+			"eventId": "11111111-1111-1111-1111-111111111001",
+			"name": "Camp Standard",
+			"pricePence": 4500,
+			"capacity": 30
+		},
+		{
+			"id": "33333333-3333-3333-3333-333333333102",
+			"eventId": "11111111-1111-1111-1111-111111111001",
+			"name": "Camp Sibling",
+			"pricePence": 3800,
+			"capacity": 10
+		},
+		{
+			"id": "33333333-3333-3333-3333-333333333103",
+			"eventId": "11111111-1111-1111-1111-111111111002",
+			"name": "General Admission",
+			"pricePence": 1200,
+			"capacity": 18
+		},
+		{
+			"id": "33333333-3333-3333-3333-333333333104",
+			"eventId": "11111111-1111-1111-1111-111111111003",
+			"name": "Course Pass",
+			"pricePence": 8000,
+			"capacity": 20
+		},
+		{
+			"id": "33333333-3333-3333-3333-333333333105",
+			"eventId": "11111111-1111-1111-1111-111111111004",
+			"name": "Drop-In",
+			"pricePence": 1500,
+			"capacity": 30
+		}
+	],
+	"bookings": [
+		{
+			"id": "88888888-8888-8888-8888-888888888101",
+			"organizerSlug": "little-acorns",
+			"bookingReference": "LA-BOOK-0001",
+			"attendeeName": "Noah Example",
+			"state": "confirmed"
+		}
+	],
+	"orders": [
+		{
+			"id": "55555555-5555-5555-5555-555555555101",
+			"state": "pending_payment",
+			"totalPence": 2400,
+			"currencyCode": "GBP"
+		},
+		{
+			"id": "55555555-5555-5555-5555-555555555102",
+			"state": "paid",
+			"totalPence": 4000,
+			"currencyCode": "GBP"
+		}
+	]
+}
