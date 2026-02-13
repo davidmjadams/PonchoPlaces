@@ -1,6 +1,6 @@
 import { run, runCapture } from './exec.mjs';
 
-export const DEFAULT_SUPABASE_LOCAL_URL = 'http://127.0.0.1:54321';
+export const DEFAULT_SUPABASE_LOCAL_URL = 'http://127.0.0.1:54351';
 
 export async function ensureSupabaseStarted(env) {
 	await run('pnpm', ['db:supabase:start'], { env });

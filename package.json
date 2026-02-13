@@ -27,7 +27,11 @@
 		"db:supabase:status": "supabase status",
 		"db:supabase:reset": "supabase db reset --no-seed --local",
 		"e2e:cucumber": "cucumber-js --import e2e/steps/**/*.js",
-		"e2e:run": "node scripts/e2e/run.mjs e2e/features/items.feature"
+		"e2e:run": "node scripts/e2e/run.mjs e2e/features/items.feature",
+		"e2e:seed:event-booking": "node scripts/e2e/seed-event-booking.mjs baseline",
+		"e2e:run:event-booking:v1": "node scripts/e2e/run.mjs e2e/features/event-booking-v1.feature",
+		"e2e:run:event-booking:v2": "node scripts/e2e/run.mjs e2e/features/event-booking-v2.feature",
+		"e2e:run:event-booking:v3": "node scripts/e2e/run.mjs e2e/features/event-booking-v3.feature"
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^0.10.4",
