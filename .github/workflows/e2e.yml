@@ -32,5 +32,5 @@ jobs:
       - name: Run E2E (Cucumber + Playwright + Supabase local)
         env:
           APP_ENV: test
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54352/postgres
         run: pnpm e2e:run
